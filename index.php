@@ -71,11 +71,29 @@
                             //Create Delete and Update buttons
                            return `<button class="btn-delete" data-id="${data.id}">Delete</button>
                            <button class="btn-update" data-id="${data.id}">Update</button>
-                           `
+                           `    
                         }
                     }
                 ]
             });
+
+            //Handle delete function
+            $("#employeeTable").on('click', '.btn-delete', function(){
+                let employeeId = $(this).data('id'); //Get the employee ID from the button's data-id attribute
+
+                if(confirm('Are you sure you want to delete this employee?')){
+                    $.ajax({
+                        url : 'delete_employee.php',
+                        method : 'POST',
+                        data : { id : employeeId},
+                        success: function(response){
+                            alert(response); //display response as an alert
+                            dataTable.ajax.reload()// reload the table after delete
+                        }
+                    })
+                }
+            })
+
 
 
             //Handle form submission via ajax
