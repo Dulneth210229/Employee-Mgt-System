@@ -77,6 +77,25 @@
                 ]
             });
 
+            //Handle update function
+            $("#employeeTable").on('click', '.btn-confirm', function(e){
+                e.preventDefault();
+                let employeeId = $(this).attr('data-id'); //Get the employee ID from the button's data-id attribute 
+
+                $.ajax({
+                    url: 'update_employee.php',
+                    method: 'POST',
+                    data: {id : employeeId},
+                    success: function(response){
+                        $('#name').val(response.id);
+                        $('#birth').val(response.birth);
+                        $('#gender').val(response.gender);
+                    }
+                })
+
+            })
+
+
             //Handle delete function
             $("#employeeTable").on('click', '.btn-delete', function(){
                 let employeeId = $(this).data('id'); //Get the employee ID from the button's data-id attribute
