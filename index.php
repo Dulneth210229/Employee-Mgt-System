@@ -33,6 +33,28 @@
 
         <button type="submit" id="submit-content">Add Employee</button>
     </form>
+     <!-- Update Employee Modal -->
+     <div id="updateModal" style="display:none;">
+        <h2>Update Employee</h2>
+        <form id="updateForm">
+            <input type="hidden" id="updateId" name="id">
+            <label for="updateName">Name:</label>
+            <input type="text" id="updateName" name="name" required><br><br>
+
+            <label for="updateBirth">Birthdate:</label>
+            <input type="date" id="updateBirth" name="birth" required><br><br>
+
+            <label for="updateGender">Gender:</label>
+            <select id="updateGender" name="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+            </select><br><br>
+
+            <button type="submit">Update Employee</button>
+            <button type="button" id="closeModal">Close</button>
+        </form>
+    </div>
 
     <hr>
     
@@ -50,6 +72,8 @@
             <!--Data will be loaded here via AJAX-->
         </tbody>
     </table>
+
+     
 
     <script>
         $(document).ready(function(){
@@ -118,11 +142,26 @@
                 e.preventDefault();
                 const empId = $(this).data('id');
 
-                if(empId){
-                    document.getElementById('submit-content').textContent = "Update Employee"
-                }
+                $.ajax({
+                    url : 'fetch_employee_byid.php',
+                    method : 'GET',
+                    data : {id : empId},
+                    success: function(response){
+                        console.log(response);
+                        //populate the update form with the fetched data
+                        $('#updateId').val(response.id);
+                        $('#updateName').val(response.name);
+                        $('#updateBirth').val(response.birth);
+                        $('#updateGender').val(response.gender);
 
-                
+                        //show the update modal
+                        $('#updateModal').show()
+                        //close the addEmployee modal
+                        $('#employeeForm').remove();
+
+                    }
+                })
+
                
             })
 

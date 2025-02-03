@@ -1,5 +1,6 @@
-<?php
+<?php 
     include('config.php');
+    header('Content-Type: application/json');
 
     if(isset($_GET['id'])){
 
