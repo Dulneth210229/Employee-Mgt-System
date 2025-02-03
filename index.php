@@ -17,7 +17,7 @@
 
     <!--Add Employee Form-->
 
-    <form id="employeeForm">
+    <form id="employeeForm" >
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -51,7 +51,7 @@
                 <option value="Other">Other</option>
             </select><br><br>
 
-            <button type="submit">Update Employee</button>
+            <button type="submit" id="update-employee">Update Employee</button>
             <button type="button" id="closeModal">Close</button>
         </form>
     </div>
@@ -153,19 +153,49 @@
                         $('#updateName').val(response.name);
                         $('#updateBirth').val(response.birth);
                         $('#updateGender').val(response.gender);
-
                         //show the update modal
                         $('#updateModal').show()
                         //close the addEmployee modal
-                        $('#employeeForm').remove();
+                        $('#employeeForm').hide();
 
                     }
                 })
-
                
             })
 
+            //Update data 
+            $('#update-employee').on('click', function(e){
+                e.preventDefault();
 
+                //get the updated values in the field
+                const id = parseInt($('#updateId').val());
+                const name = $('#updateName').val();
+                const birth = $('#updateBirth').val();
+                const gender = $('#updateGender').val();
+
+                //create Data object
+                const data = {
+                    id : id,
+                    name: name,
+                    birth : birth,
+                    gender: gender,
+                }
+
+                $.ajax ({
+                    url : 'update_employee.php',
+                    method: 'POST',
+                    data : data,
+                    success: function(response){
+                        alert(response);
+                        //show the update modal
+                        $('#updateModal').hide()
+                        // //close the addEmployee modal
+                        $('#employeeForm').show();
+                        dataTable.ajax.reload();
+                    }
+
+                })
+            })
 
             //Handle form submission via ajax
             $("#employeeForm").on('submit', function(e){
