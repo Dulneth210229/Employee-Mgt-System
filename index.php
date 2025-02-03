@@ -78,22 +78,22 @@
             });
 
             //Handle update function
-            $("#employeeTable").on('click', '.btn-confirm', function(e){
-                e.preventDefault();
-                let employeeId = $(this).attr('data-id'); //Get the employee ID from the button's data-id attribute 
+            // $("#employeeTable").on('click', '.btn-confirm', function(e){
+            //     e.preventDefault();
+            //     let employeeId = $(this).attr('data-id'); //Get the employee ID from the button's data-id attribute 
 
-                $.ajax({
-                    url: 'update_employee.php',
-                    method: 'POST',
-                    data: {id : employeeId},
-                    success: function(response){
-                        $('#name').val(response.id);
-                        $('#birth').val(response.birth);
-                        $('#gender').val(response.gender);
-                    }
-                })
+            //     $.ajax({
+            //         url: 'update_employee.php',
+            //         method: 'POST',
+            //         data: {id : employeeId},
+            //         success: function(response){
+            //             $('#name').val(response.id);
+            //             $('#birth').val(response.birth);
+            //             $('#gender').val(response.gender);
+            //         }
+            //     })
 
-            })
+            // })
 
 
             //Handle delete function
@@ -113,10 +113,18 @@
                 }
             })
 
+            //Handle update function
+            $('#employeeTable').on('click', '.btn-update', function(e) {
+                e.preventDefault();
+
+                const empId = $(this).data('id');
+                alert(`Employee id is ${empId}`);
+            })
+
 
 
             //Handle form submission via ajax
-            $("employeeForm").on('submit', function(e){
+            $("#employeeForm").on('submit', function(e){
                 e.preventDefault();
 
                 //Get values manually
