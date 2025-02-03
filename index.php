@@ -30,6 +30,8 @@
             <option value="Female">Female</option>
             <option value="Other">Other</option>
         </select><br><br>
+        <label for="resume" > Resume </label>
+        <input type="file" id="resume" accept=".pdf" required><br><br>
 
         <button type="submit" id="submit-content">Add Employee</button>
     </form>
@@ -50,6 +52,9 @@
                 <option value="Female">Female</option>
                 <option value="Other">Other</option>
             </select><br><br>
+
+            <label for="resume" > Resume </label>
+        <input type="file" id="resume" accept=".pdf" required><br><br>
 
             <button type="submit" id="update-employee">Update Employee</button>
             <button type="button" id="closeModal">Close</button>
