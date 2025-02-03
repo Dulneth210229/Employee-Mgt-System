@@ -31,7 +31,7 @@
             <option value="Other">Other</option>
         </select><br><br>
 
-        <button type="submit">Add Employee</button>
+        <button type="submit" id="submit-content">Add Employee</button>
     </form>
 
     <hr>
@@ -116,9 +116,14 @@
             //Handle update function
             $('#employeeTable').on('click', '.btn-update', function(e) {
                 e.preventDefault();
-
                 const empId = $(this).data('id');
-                alert(`Employee id is ${empId}`);
+
+                if(empId){
+                    document.getElementById('submit-content').textContent = "Update Employee"
+                }
+
+                
+               
             })
 
 
