@@ -9,6 +9,11 @@
         $birth = $_POST['birth'];
         $gender = $_POST['gender'];
 
+        // $id = 18;
+        // $name = "Kasun";
+        // $birth = "2002-12-21";
+        // $gender = "Male";
+
         //calculate the age from the birth data
         $birthDate = new DateTime($birth);
         $today = new DateTime();
@@ -26,7 +31,7 @@
             $fileName = uniqid() . '_' .basename($_FILES['resume']['name']);
             $filePath = $uploadDir . $fileName;
             
-            if(!move_uploaded_file($_FILES['resume']['temp_name'],$filePath)){
+            if(!move_uploaded_file($_FILES['resume']['tmp_name'],$filePath)){
                 echo "Error uploading resume";
                 exit;
             }
@@ -37,7 +42,7 @@
         //Update data in the database
         if($filePath){
             //If a new resume uploaded, update the resume field
-            $sql = "UPDATE emp_table SET name = '$name', age = $age, birth = '$birth' gender = '$gender' resume = '$filePath' WHERE id = $id ";
+            $sql = "UPDATE emp_table SET name = '$name', age = $age, birth = '$birth', gender = '$gender', resume = '$filePath' WHERE id = $id ";
         }else{
             //If no resume is uploaded, keep the existing resume
             $sql = "UPDATE emp_table SET name = '$name', age = $age, birth = '$birth', gender = '$gender' WHERE id = $id";

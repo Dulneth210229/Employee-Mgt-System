@@ -1,5 +1,4 @@
-<?php
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +16,7 @@
 
     <!--Add Employee Form-->
 
-    <form id="employeeForm" >
+    <form id="employeeForm"   enctype="multipart/form-data">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
@@ -31,14 +30,14 @@
             <option value="Other">Other</option>
         </select><br><br>
         <label for="resume" > Resume </label>
-        <input type="file" id="resume" accept=".pdf" required><br><br>
+        <input type="file" id="resume" accept=".pdf" name="resume" required><br><br>
 
         <button type="submit" id="submit-content">Add Employee</button>
     </form>
      <!-- Update Employee Modal -->
      <div id="updateModal" style="display:none;">
         <h2>Update Employee</h2>
-        <form id="updateForm">
+        <form id="updateForm" enctype="multipart/form-data">
             <input type="hidden" id="updateId" name="id">
             <label for="updateName">Name:</label>
             <input type="text" id="updateName" name="name" required><br><br>
@@ -53,8 +52,8 @@
                 <option value="Other">Other</option>
             </select><br><br>
 
-            <label for="resume" > Resume </label>
-        <input type="file" id="resume" accept=".pdf" required><br><br>
+            <label for="updateResume" >Resume :</label>
+        <input type="file" id="updateResume" name="resume" accept=".pdf" ><br><br>
 
             <button type="submit" id="update-employee">Update Employee</button>
             <button type="button" id="closeModal">Close</button>
@@ -71,14 +70,13 @@
             <th>Age</th>
             <th>Birthdate</th>
             <th>Gender</th>
+            <th>Resume</th>
             <th>Action</th>
         </thead>
         <tbody>
             <!--Data will be loaded here via AJAX-->
         </tbody>
     </table>
-
-     
 
     <script>
         $(document).ready(function(){
@@ -95,6 +93,16 @@
                     {data: 'age'},
                     {data: 'birth'},
                     {data: 'gender'},
+                    {data : 'resume',
+                        render: function(data, type, row){
+                            if(data){
+                                return `<a href="${data}"
+                                 target = "_blank"> View Resume</a>`
+                            }else{
+                                return "No resume uploaded";
+                            }
+                        }
+                    },
                     { data: null,
                         render: function(data, type, row){
                             //Create Delete and Update buttons
@@ -105,25 +113,6 @@
                     }
                 ]
             });
-
-            //Handle update function
-            // $("#employeeTable").on('click', '.btn-confirm', function(e){
-            //     e.preventDefault();
-            //     let employeeId = $(this).attr('data-id'); //Get the employee ID from the button's data-id attribute 
-
-            //     $.ajax({
-            //         url: 'update_employee.php',
-            //         method: 'POST',
-            //         data: {id : employeeId},
-            //         success: function(response){
-            //             $('#name').val(response.id);
-            //             $('#birth').val(response.birth);
-            //             $('#gender').val(response.gender);
-            //         }
-            //     })
-
-            // })
-
 
             //Handle delete function
             $("#employeeTable").on('click', '.btn-delete', function(){
@@ -169,27 +158,34 @@
             })
 
             //Update data 
-            $('#update-employee').on('click', function(e){
+            $('#updateForm').on('submit', function(e){
                 e.preventDefault();
 
-                //get the updated values in the field
-                const id = parseInt($('#updateId').val());
-                const name = $('#updateName').val();
-                const birth = $('#updateBirth').val();
-                const gender = $('#updateGender').val();
+                // //get the updated values in the field
+                // const id = parseInt($('#updateId').val());
+                // const name = $('#updateName').val();
+                // const birth = $('#updateBirth').val();
+                // const gender = $('#updateGender').val();
 
-                //create Data object
-                const data = {
-                    id : id,
-                    name: name,
-                    birth : birth,
-                    gender: gender,
-                }
-
+                // //create Data object
+                // const data = {
+                //     id : id,
+                //     name: name,
+                //     birth : birth,
+                //     gender: gender,
+                // }
+                
+                //! Instead of manually creating the data object we can use FormData object to create the data object
+                //? create a FormData object
+                let formdata = new FormData(this);
+               
+               
                 $.ajax ({
-                    url : 'update_employee.php',
+                    url : 'update_employee-with_file.php',
                     method: 'POST',
-                    data : data,
+                    data : formdata,
+                    processData: false, //Prevent JQuery from processing the data
+                    contentType: false, // Prevent JQuery from setting the content type
                     success: function(response){
                         alert(response);
                         //show the update modal
@@ -197,6 +193,10 @@
                         // //close the addEmployee modal
                         $('#employeeForm').show();
                         dataTable.ajax.reload();
+                    },
+                    error: function(xhr, status, error){
+                        console.log('Error Updating employee : ', error);
+                        
                     }
 
                 })
@@ -206,23 +206,16 @@
             $("#employeeForm").on('submit', function(e){
                 e.preventDefault();
 
-                //Get values manually
-                let name = $('#name').val();
-                let birth = $('#birth').val();
-                let gender = $('#gender').val();
-
-                //create data object with key value pairs
-                let data = {
-                    name: name,
-                    birth: birth,
-                    gender: gender,
-                }
+                //create a formData object
+                let formData = new FormData(this);
 
 
                 $.ajax({
-                    url: 'add_employee.php',
+                    url: 'add_employee_with_file.php',
                     method: 'POST',
-                    data: data,
+                    data: formData,
+                    processData: false, //Prevent Jquery from the processing data
+                    contentType: false, //Prevent JQuery from setting the content type
                     success: function(response){
                         alert(response); //get the response from the backend and display the response as an alert
                         dataTable.ajax.reload(); //refresh the data table
